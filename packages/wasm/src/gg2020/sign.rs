@@ -124,7 +124,7 @@ impl Signer {
     /// internally to be used when `create()` is called.
     ///
     /// Return a partial signature that must be sent to the other
-    /// signing participents.
+    /// signing participants.
     pub fn partial(&mut self, message: JsValue) -> Result<JsValue, JsError> {
         let message: Vec<u8> = serde_wasm_bindgen::from_value(message)?;
         let message: [u8; 32] = message.as_slice().try_into()?;
@@ -136,6 +136,24 @@ impl Signer {
         self.completed = Some((completed_offline_stage, data));
 
         Ok(serde_wasm_bindgen::to_value(&partial)?)
+    }
+
+    /// Add partial signatures without validating them. Allows multiple partial signatures
+    /// to be combined into a single partial signature before sending it to the other participants.
+   pub fn add(&mut self, partials: JsValue) -> Result<JsValue, JsError> {
+        let partials: Vec<PartialSignature> =
+            serde_wasm_bindgen::from_value(partials)?;
+
+        let (completed_offline_stage, data) = self
+            .completed
+            .take()
+            .ok_or_else(|| JsError::new(ERR_COMPLETED_OFFLINE_STAGE))?;
+        let (sign, partial) =
+            SignManual::new(data.clone(), completed_offline_stage.clone())?;
+
+        let (_sign, aggregated_partial) = sign.add(&partials)?;
+
+        Ok(serde_wasm_bindgen::to_value(&aggregated_partial)?)
     }
 
     /// Create and verify the signature.

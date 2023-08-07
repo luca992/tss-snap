@@ -44,11 +44,11 @@ default-features = false
 
 [dependencies.multi-party-ecdsa]
 git = "https://github.com/luca992/multi-party-ecdsa"
-branch = "serializable-completed-offline-stage"
+branch = "incremental-sign"
 default-features = false
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
 
 [patch.'https://github.com/webb-tools/multi-party-ecdsa.git']
-multi-party-ecdsa = { git = "https://github.com/luca992/multi-party-ecdsa", branch = "serializable-completed-offline-stage" }
+multi-party-ecdsa = { git = "https://github.com/luca992/multi-party-ecdsa", branch = "incremental-sign" }
