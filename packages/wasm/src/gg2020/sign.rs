@@ -114,6 +114,12 @@ impl Signer {
         }
     }
 
+    /// Returns the completed offline stage if available.
+    pub fn completed_offline_stage(&mut self) -> Result<JsValue, JsError> {
+        let completed_offline_stage = self.inner.pick_output().unwrap()?;
+        Ok(serde_wasm_bindgen::to_value(&completed_offline_stage)?)
+    }
+
     /// Generate the completed offline stage and store the result
     /// internally to be used when `create()` is called.
     ///

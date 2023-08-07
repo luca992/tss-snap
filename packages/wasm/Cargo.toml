@@ -43,9 +43,12 @@ package = "kzen-paillier"
 default-features = false
 
 [dependencies.multi-party-ecdsa]
-git = "https://github.com/webb-tools/multi-party-ecdsa"
+git = "https://github.com/luca992/multi-party-ecdsa"
+branch = "serializable-completed-offline-stage"
 default-features = false
-version = "*"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
+
+[patch.'https://github.com/webb-tools/multi-party-ecdsa.git']
+multi-party-ecdsa = { git = "https://github.com/luca992/multi-party-ecdsa", branch = "serializable-completed-offline-stage" }
