@@ -1,6 +1,9 @@
 wasm:
 	@cd packages/wasm && wasm-pack build --target web --scope lavamoat
 
+wasm-nodejs:
+	@cd packages/wasm && wasm-pack build --target nodejs --scope lavamoat
+
 snap-wasm:
 	@cd snap/wasm && wasm-pack build --target web --scope lavamoat
 
