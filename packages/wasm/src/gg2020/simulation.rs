@@ -1,20 +1,16 @@
-use std::fmt::Debug;
-
 use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::party_i::Parameters;
-use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::keygen::{
-    Keygen, LocalKey,
-};
-use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::sign::{
-    CompletedOfflineStage, OfflineStage,
-};
+use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::keygen::{Keygen, LocalKey};
+use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::sign::{CompletedOfflineStage, OfflineStage};
 use round_based::dev::Simulation;
-use wasm_bindgen::JsValue;
+use wasm_bindgen::{JsError, JsValue};
 use wasm_bindgen::prelude::wasm_bindgen;
+
+use crate::KeyShare;
 
 #[wasm_bindgen]
 pub fn simulate_keygen(
     parameters: JsValue,
-) -> Vec<LocalKey<curv::elliptic::curves::Secp256k1>> {
+) -> Result<JsValue, JsError> {
     let params: Parameters = serde_wasm_bindgen::from_value(parameters)?;
     let t = params.threshold;
     let n = params.share_count;
@@ -26,7 +22,8 @@ pub fn simulate_keygen(
 
     let keys = simulation.run().unwrap();
 
-    keys
+    let key_shares: Vec<KeyShare> = keys.into_iter().map(|k| k.into()).collect();
+    Ok(serde_wasm_bindgen::to_value(&key_shares)?)
 }
 
 pub fn simulate_offline_stage(
