@@ -277,12 +277,15 @@ pub fn simulate_keygen(parameters: JsValue) -> Result<JsValue, JsError> {
     Ok(serde_wasm_bindgen::to_value(&key_shares)?)
 }
 
+#[wasm_bindgen]
 pub fn simulate_offline_stage(
-    local_keys: &Vec<LocalKey<curv::elliptic::curves::Secp256k1>>,
-    s_l: &[u16],
-) -> Vec<CompletedOfflineStage> {
+    local_keys: JsValue,
+    participants: JsValue,
+) -> Result<JsValue, JsError> {
     let mut simulation = Simulation::new();
-
+    let local_keys: Vec<LocalKey<Secp256k1>> =
+        serde_wasm_bindgen::from_value(local_keys)?;
+    let s_l: Vec<u16> = serde_wasm_bindgen::from_value(participants)?;
     for (i, &keygen_i) in (1..).zip(s_l) {
         simulation.add_party(
             OfflineStage::new(
@@ -290,11 +293,11 @@ pub fn simulate_offline_stage(
                 s_l.to_vec(),
                 local_keys[usize::from(keygen_i - 1)].clone(),
             )
-                .unwrap(),
+            .unwrap(),
         );
     }
 
     let stages = simulation.run().unwrap();
 
-    stages
+    Ok(serde_wasm_bindgen::to_value(&stages)?)
 }
