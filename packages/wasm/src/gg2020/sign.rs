@@ -18,7 +18,7 @@ use wasm_bindgen::prelude::*;
 
 //use crate::{console_log, log};
 
-const ERR_COMPLETED_OFFLINE_STAGE: &str =
+pub const ERR_COMPLETED_OFFLINE_STAGE: &str =
     "completed offline stage unavailable, has partial() been called?";
 
 /// Wrapper for a round `Msg` that includes the round
@@ -140,7 +140,7 @@ impl Signer {
 
     /// Add partial signatures without validating them. Allows multiple partial signatures
     /// to be combined into a single partial signature before sending it to the other participants.
-   pub fn add(&mut self, partials: JsValue) -> Result<JsValue, JsError> {
+    pub fn add(&mut self, partials: JsValue) -> Result<JsValue, JsError> {
         let partials: Vec<PartialSignature> =
             serde_wasm_bindgen::from_value(partials)?;
 

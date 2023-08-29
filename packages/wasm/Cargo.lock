@@ -865,6 +865,7 @@ dependencies = [
  "curv-kzen",
  "getrandom 0.1.16",
  "hex",
+ "js-sys",
  "kzen-paillier",
  "log",
  "mpc-ecdsa-getrandom-hack",
