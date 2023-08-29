@@ -1,3 +1,4 @@
+use curv::elliptic::curves::Secp256k1;
 use std::fmt::Debug;
 
 use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::keygen::{Keygen, LocalKey};
@@ -70,11 +71,11 @@ impl<P> Simulation<P> {
 }
 
 impl<P> Simulation<P>
-    where
-        P: StateMachine,
-        P: Debug,
-        P::Err: Debug,
-        P::MessageBody: Debug + Clone,
+where
+    P: StateMachine,
+    P: Debug,
+    P::Err: Debug,
+    P::MessageBody: Debug + Clone,
 {
     /// Runs a simulation
     ///
@@ -131,11 +132,11 @@ struct Party<'p, P> {
 }
 
 impl<'p, P> Party<'p, P>
-    where
-        P: StateMachine,
-        P: Debug,
-        P::Err: Debug,
-        P::MessageBody: Debug + Clone,
+where
+    P: StateMachine,
+    P: Debug,
+    P::Err: Debug,
+    P::MessageBody: Debug + Clone,
 {
     pub fn proceed_if_needed(&mut self) -> Result<(), P::Err> {
         if !self.state.wants_to_proceed() {
@@ -156,7 +157,10 @@ impl<'p, P> Party<'p, P>
         Ok(())
     }
 
-    pub fn send_outgoing(&mut self, msgs_pull: &mut Vec<Msg<P::MessageBody>>) {
+    pub fn send_outgoing(
+        &mut self,
+        msgs_pull: &mut Vec<Msg<P::MessageBody>>,
+    ) {
         if !self.state.message_queue().is_empty() {
             println!(
                 "Party {} sends {} message(s)",
@@ -169,10 +173,14 @@ impl<'p, P> Party<'p, P>
         }
     }
 
-    pub fn handle_incoming(&mut self, msgs_pull: &[Msg<P::MessageBody>]) -> Result<(), P::Err> {
+    pub fn handle_incoming(
+        &mut self,
+        msgs_pull: &[Msg<P::MessageBody>],
+    ) -> Result<(), P::Err> {
         for msg in msgs_pull {
             if Some(self.state.party_ind()) != msg.receiver
-                && (msg.receiver.is_some() || msg.sender == self.state.party_ind())
+                && (msg.receiver.is_some()
+                    || msg.sender == self.state.party_ind())
             {
                 continue;
             }
@@ -198,12 +206,14 @@ impl<'p, P> Party<'p, P>
     }
 }
 
-fn finish_if_possible<P>(parties: &mut Vec<Party<P>>) -> Result<Option<Vec<P::Output>>, P::Err>
-    where
-        P: StateMachine,
-        P: Debug,
-        P::Err: Debug,
-        P::MessageBody: Debug + Clone,
+fn finish_if_possible<P>(
+    parties: &mut Vec<Party<P>>,
+) -> Result<Option<Vec<P::Output>>, P::Err>
+where
+    P: StateMachine,
+    P: Debug,
+    P::Err: Debug,
+    P::MessageBody: Debug + Clone,
 {
     let someone_is_finished = parties.iter().any(|p| p.state.is_finished());
     if !someone_is_finished {
@@ -250,9 +260,7 @@ fn finish_if_possible<P>(parties: &mut Vec<Party<P>>) -> Result<Option<Vec<P::Ou
 }
 
 #[wasm_bindgen]
-pub fn simulate_keygen(
-    parameters: JsValue,
-) -> Result<JsValue, JsError> {
+pub fn simulate_keygen(parameters: JsValue) -> Result<JsValue, JsError> {
     let params: Parameters = serde_wasm_bindgen::from_value(parameters)?;
     let t = params.threshold;
     let n = params.parties;
@@ -264,7 +272,8 @@ pub fn simulate_keygen(
 
     let keys = simulation.run().unwrap();
 
-    let key_shares: Vec<KeyShare> = keys.into_iter().map(|k| k.into()).collect();
+    let key_shares: Vec<KeyShare> =
+        keys.into_iter().map(|k| k.into()).collect();
     Ok(serde_wasm_bindgen::to_value(&key_shares)?)
 }
 
