@@ -5,8 +5,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use crate::gg2020::simulate::simulation::Simulation;
 use crate::{KeyShare, Parameters};
 
-#[wasm_bindgen]
-pub fn simulate_keygen(parameters: JsValue) -> Result<JsValue, JsError> {
+#[wasm_bindgen(js_name = "keygenSimulated")]
+pub fn keygen_simulated(parameters: JsValue) -> Result<JsValue, JsError> {
     let params: Parameters = serde_wasm_bindgen::from_value(parameters)?;
     let t = params.threshold;
     let n = params.parties;

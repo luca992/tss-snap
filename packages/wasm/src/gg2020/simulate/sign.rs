@@ -104,8 +104,8 @@ impl SimulationSigner {
     }
 }
 
-#[wasm_bindgen]
-pub fn simulate_offline_stage(
+#[wasm_bindgen(js_name = "signingOfflineStageSimulated")]
+pub fn signing_offline_stage_simulated(
     local_keys: JsValue,
     participants: JsValue,
 ) -> Result<Array, JsError> {
