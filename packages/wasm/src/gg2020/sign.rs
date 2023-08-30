@@ -148,7 +148,7 @@ impl Signer {
             .completed
             .take()
             .ok_or_else(|| JsError::new(ERR_COMPLETED_OFFLINE_STAGE))?;
-        let (sign, partial) =
+        let (sign, _partial) =
             SignManual::new(data.clone(), completed_offline_stage.clone())?;
 
         let (_sign, aggregated_partial) = sign.add(&partials)?;
