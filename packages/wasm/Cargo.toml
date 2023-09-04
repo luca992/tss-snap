@@ -26,9 +26,8 @@ log = "0.4"
 wasm-log = "0.3"
 
 [dependencies.cggmp-threshold-ecdsa]
-#git = "https://github.com/webb-tools/cggmp-threshold-ecdsa.git"
-git = "https://github.com/tmpfs/cggmp-threshold-ecdsa.git"
-branch = "wasm-serde"
+git = "https://github.com/webb-tools/cggmp-threshold-ecdsa.git"
+rev = "0e6bd67"
 features = ["num-bigint"]
 default-features = false
 

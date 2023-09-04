@@ -55,6 +55,7 @@ impl KeyRefresh {
         local_key: JsValue,
         new_party_index: JsValue,
         old_to_new: JsValue,
+        current_t: JsValue,
     ) -> Result<KeyRefresh, JsError> {
         let params: Parameters = serde_wasm_bindgen::from_value(parameters)?;
         let local_key: Option<LocalKey<Secp256k1>> =
@@ -63,6 +64,8 @@ impl KeyRefresh {
             serde_wasm_bindgen::from_value(new_party_index)?;
         let old_to_new: HashMap<u16, u16> =
             serde_wasm_bindgen::from_value(old_to_new)?;
+        let current_t_option: Option<u16> =
+            serde_wasm_bindgen::from_value(current_t)?;
 
         Ok(Self {
             inner: state_machine::KeyRefresh::new(
@@ -71,6 +74,7 @@ impl KeyRefresh {
                 &old_to_new,
                 params.threshold,
                 params.parties,
+                current_t_option,
             )?,
         })
     }
