@@ -2,14 +2,15 @@ use std::collections::HashMap;
 
 use cggmp_threshold_ecdsa::refresh::state_machine::KeyRefresh;
 use curv::elliptic::curves::Secp256k1;
-use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::party_i::Parameters;
 use multi_party_ecdsa::protocols::multi_party_ecdsa::gg_2020::state_machine::keygen::LocalKey;
+use serde::Deserialize;
 use wasm_bindgen::{JsError, JsValue};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::gg2020::simulate::simulation::Simulation;
-use crate::KeyShare;
+use crate::{KeyShare, Parameters};
 
+#[derive(Deserialize)]
 pub enum KeyRefreshItem {
     Existing {
         key: LocalKey<Secp256k1>,
@@ -34,7 +35,7 @@ pub fn key_refresh_simulated(
     let mut simulation = Simulation::<KeyRefresh>::new();
     let mut old_to_new = HashMap::new();
     let mut old_t = 0;
-    for item in key_refresh_items {
+    for item in &key_refresh_items {
         match item {
             KeyRefreshItem::Existing {
                 key,
