@@ -137,3 +137,22 @@ pub fn signing_offline_stage_simulated(
 
     Ok(signers_result)
 }
+
+#[wasm_bindgen(js_name = "createSigners")]
+pub fn create_signers(
+    completed_offline_stages: JsValue,
+) -> Result<Array, JsError> {
+    let signing_offline_stages: Vec<CompletedOfflineStage> =
+        serde_wasm_bindgen::from_value(completed_offline_stages)?;
+    let simulation_signers = signing_offline_stages
+        .into_iter()
+        .map(|s| SimulationSigner::new(s))
+        .collect::<Vec<_>>();
+
+    let signers_result = Array::new();
+    for signer in simulation_signers.into_iter() {
+        signers_result.push(&JsValue::from(signer));
+    }
+
+    Ok(signers_result)
+}
