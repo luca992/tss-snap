@@ -883,7 +883,7 @@ dependencies = [
 [[package]]
 name = "multi-party-ecdsa"
 version = "0.8.2"
-source = "git+https://github.com/luca992/multi-party-ecdsa?branch=incremental-sign#a6c8c71cff55736d75da2e5ee3bcf42e0c8fd86a"
+source = "git+https://github.com/luca992/multi-party-ecdsa?branch=incremental-sign#e151023188c93a4af67d452e1a64bab04859e521"
 dependencies = [
  "centipede",
  "curv-kzen",
